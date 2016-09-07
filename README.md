@@ -1,5 +1,8 @@
 # README #
 
+### Start Date ###
+Away we go: 09/07/2016 12:56:22
+
 ### What is this repository for? ###
 Personal project for Formula 1 news
 
