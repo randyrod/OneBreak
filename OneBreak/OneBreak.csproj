@@ -131,7 +131,12 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  
+  <ItemGroup>
+    <ProjectReference Include="..\OneBreakUtils\OneBreakUtils.csproj">
+      <Project>{EE36B3BD-2EEB-4D47-8BC0-065D39617B3E}</Project>
+      <Name>OneBreakUtils</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
