@@ -1,0 +1,53 @@
+﻿using OneBreak.Models;
+using OneBreakUtils;
+using OneBreakUtils.HttpStrings;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+namespace OneBreak.Helpers
+{
+    public class NewsRequestHelper
+    {
+        public static async Task<List<NewsModel>> GetGpuNews()
+        {
+            var parameters = new HttpRequestParameters
+            {
+                Url = StringResources.GpuRssUrl,
+                Method = HttpMethod.Get
+            };
+
+            var result = await HttpRequestHelper.GetStringFromUrl(parameters);
+
+            if (string.IsNullOrEmpty(result)) return null;
+
+            var rssContent = XmlSerializationHelper.DeserializeStringToXmlObject<GpuRss>(result);
+
+            if (rssContent == null) return null;
+
+            var news = new List<NewsModel>();
+            var itemsCount = rssContent.Channel.Item.Count;
+            foreach (var gpNews in rssContent.Channel.Item)
+            {
+                if (string.IsNullOrEmpty(gpNews.Title) ||
+                    string.IsNullOrEmpty(gpNews.Description) ||
+                    string.IsNullOrEmpty(gpNews.Link2) ||
+                    gpNews.Enclosure == null)
+                {
+                    continue;
+                }
+                
+                var newNews = new NewsModel
+                {
+                    Title = gpNews.Title,
+                    Description = gpNews.Description,
+                    CoverArtImageUrl = gpNews.Enclosure.Url,
+                    OriginalUrl = gpNews.Link2
+                };
+
+                news.Add(newNews);
+            }
+            return news;
+        }
+    }
+}
