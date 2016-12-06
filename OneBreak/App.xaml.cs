@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OneBreak.Pages;
+using OneBreak.ViewModels;
+using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -12,6 +14,7 @@ namespace OneBreak
 {
     sealed partial class App : Application
     {
+        public static NewsViewModel NewsViewModel { get; } = new NewsViewModel();
         public App()
         {
             this.InitializeComponent();
@@ -52,7 +55,7 @@ namespace OneBreak
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(NewsPage), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
