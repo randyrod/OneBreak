@@ -1,0 +1,24 @@
+﻿<Page
+    x:Class="OneBreak.Pages.NewsDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OneBreak.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <ScrollViewer>
+            <StackPanel>
+                <Image Grid.Row="0" Source="{x:Bind CurrentNews.CoverArtImageUrl, Mode=OneWay}" Margin="20, 0" VerticalAlignment="Top"/>
+
+                <ProgressBar IsIndeterminate="True" Foreground="Red" Margin="10" 
+                             Visibility="{x:Bind CurrentNews.Loading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
+                             IsEnabled="{x:Bind CurrentNews.Loading, Mode=OneWay}"/>
+                
+                <TextBlock x:Name="NewsText" Text="{x:Bind CurrentNews.NewsBody, Mode=OneWay}" HorizontalAlignment="Center"
+                    TextWrapping="WrapWholeWords" Margin="20"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
