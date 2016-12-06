@@ -1,6 +1,8 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Resources;
+using Windows.ApplicationModel.Resources.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -78,6 +80,47 @@ namespace OneBreak
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private const string ResourcesKey = "Resources";
+        public static async Task<string> GetStringFromResources(string key, bool fromUiTread = true)
+        {
+            if (string.IsNullOrEmpty(key)) return null;
+            if(fromUiTread)
+            {
+                try
+                {
+                    var resource = ResourceLoader.GetForCurrentView();
+                    return resource.GetString(key);
+                }
+                catch (Exception)
+                {
+                    //TODO: Log error
+                    return null;
+                }
+            }
+            else
+            {
+                try
+                {
+                    string resource = null;
+                    await Windows.System.Threading.ThreadPool.RunAsync((s) =>
+                    {
+                        var resourceMap = ResourceManager.Current.MainResourceMap.GetSubtree(ResourcesKey);
+
+                        var context = ResourceContext.GetForViewIndependentUse();
+
+                        resource = resourceMap.GetValue(key, context).ValueAsString;
+                    });
+
+                    return resource;
+                }
+                catch (Exception)
+                {
+                    //TODO: log error
+                    return null;
+                }
+            }
         }
     }
 }
