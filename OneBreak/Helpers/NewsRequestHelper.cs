@@ -3,6 +3,7 @@ using OneBreakUtils;
 using OneBreakUtils.HttpStrings;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace OneBreak.Helpers
@@ -27,6 +28,7 @@ namespace OneBreak.Helpers
 
             var news = new List<NewsModel>();
             var itemsCount = rssContent.Channel.Item.Count;
+            var rgx = new Regex("\\&\\w+\\;$");
             foreach (var gpNews in rssContent.Channel.Item)
             {
                 if (string.IsNullOrEmpty(gpNews.Title) ||
@@ -36,7 +38,9 @@ namespace OneBreak.Helpers
                 {
                     continue;
                 }
-                
+
+                gpNews.Description = rgx.Replace(gpNews.Description, "...");
+
                 var newNews = new NewsModel
                 {
                     Title = gpNews.Title,
@@ -48,6 +52,22 @@ namespace OneBreak.Helpers
                 news.Add(newNews);
             }
             return news;
+        }
+
+        public static async Task<string> GetGpuNewsBody(string url)
+        {
+            if (string.IsNullOrEmpty(url)) return null;
+
+            var parameters = new HttpRequestParameters
+            {
+                Url = url,
+                Method = HttpMethod.Get
+            };
+
+            var result = await HttpRequestHelper.GetStringFromUrl(parameters);
+
+            return string.IsNullOrEmpty(result) ? null : result;
+
         }
     }
 }
