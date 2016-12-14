@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="Models\GpuRssModel.cs" />
     <Compile Include="Models\NewsModel.cs" />
+    <Compile Include="Models\RaceModel.cs" />
     <Compile Include="Pages\NewsDetailPage.xaml.cs">
       <DependentUpon>NewsDetailPage.xaml</DependentUpon>
     </Compile>
