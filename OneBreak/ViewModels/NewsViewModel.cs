@@ -67,31 +67,5 @@ namespace OneBreak.ViewModels
 
             Loading = false;
         }
-
-        public async Task<NewsModel> LoadNewsBody(int newsIndex)
-        {
-            if (newsIndex <= -1 || newsIndex >= News.Count) return null;
-
-            var news = News[newsIndex];
-
-            return news;
-
-            if (!string.IsNullOrEmpty(news.NewsBody)) return news;
-
-            var newsBody = await NewsRequestHelper.GetGpuNewsBody(news.OriginalUrl);
-
-            if (newsBody == null) return null;
-
-            newsBody = SanitizeNewsBody(newsBody);
-
-            news.NewsBody = newsBody;
-
-            return news;
-        }
-
-        private string SanitizeNewsBody(string body)
-        {
-            return null;
-        }
     }
 }
