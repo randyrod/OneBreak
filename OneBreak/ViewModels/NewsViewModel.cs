@@ -57,7 +57,9 @@ namespace OneBreak.ViewModels
             var gpuProviderText = await App.GetStringFromResources(GpuProviderKey, false);
             
 
-            if (result == null) return;
+            if (result == null || result.Count <= 0) return;
+
+            if (News.Count > 0 && News[0].Title == result[0].Title) return;
 
             foreach (var item in result)
             {
