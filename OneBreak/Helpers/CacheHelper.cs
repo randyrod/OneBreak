@@ -6,7 +6,7 @@ namespace OneBreak.Helpers
 {
     public class CacheHelper
     {
-        public async Task<string> GetChacheContent(string fileName, string folderName)
+        public static async Task<string> GetChacheContent(string fileName, string folderName)
         {
             var cacheFolder = await GetCacheFolder(fileName);
 
@@ -28,7 +28,7 @@ namespace OneBreak.Helpers
             }
         }
 
-        public async Task CreateChache(string fileName, string folderName, string content)
+        public static async Task CreateChache(string fileName, string folderName, string content)
         {
             if (string.IsNullOrEmpty(fileName) || 
                 string.IsNullOrEmpty(folderName) || 
@@ -51,7 +51,7 @@ namespace OneBreak.Helpers
             }
         }
 
-        private async Task<StorageFolder> GetCacheFolder(string folderName)
+        private static async Task<StorageFolder> GetCacheFolder(string folderName)
         {
             if (string.IsNullOrEmpty(folderName)) return null;
 
@@ -70,7 +70,7 @@ namespace OneBreak.Helpers
             }
         }
 
-        private async Task<StorageFile> GetCacheFile(string fileName, StorageFolder cacheFolder)
+        private static async Task<StorageFile> GetCacheFile(string fileName, StorageFolder cacheFolder)
         {
             if (string.IsNullOrEmpty(fileName) || cacheFolder == null) return null;
 

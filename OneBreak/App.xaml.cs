@@ -1,5 +1,4 @@
 ﻿using OneBreak.Pages;
-﻿using OneBreak.Helpers;
 using OneBreak.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -17,7 +16,6 @@ namespace OneBreak
     {
         public static NewsViewModel NewsViewModel { get; } = new NewsViewModel();
 
-        public static CacheHelper CacheHelper { get; } = new CacheHelper();
         public App()
         {
             this.InitializeComponent();
