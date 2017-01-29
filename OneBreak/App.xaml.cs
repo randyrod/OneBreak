@@ -1,4 +1,5 @@
 ﻿using OneBreak.Pages;
+﻿using OneBreak.Helpers;
 using OneBreak.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace OneBreak
     sealed partial class App : Application
     {
         public static NewsViewModel NewsViewModel { get; } = new NewsViewModel();
+
+        public static CacheHelper CacheHelper { get; } = new CacheHelper();
         public App()
         {
             this.InitializeComponent();
