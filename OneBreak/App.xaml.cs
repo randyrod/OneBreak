@@ -20,6 +20,14 @@ namespace OneBreak
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.Resuming += OnResuming;
+        }
+
+        private void OnResuming(object sender, object e)
+        {
+            if (NewsViewModel == null) return;
+
+            NewsViewModel.LoadNews();
         }
 
         /// <summary>
