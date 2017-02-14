@@ -22,13 +22,8 @@ namespace OneBreak.Controls
             set { SetValue(ItemTextProperty, value); }
         }
 
-        public DependencyProperty NavigationPageProperty = DependencyProperty.Register(nameof(NavigationPage), 
-            typeof(Page), typeof(LeftNavItemControl), new PropertyMetadata(null));
-        public Type NavigationPage
-        {
-            get { return (Type)GetValue(NavigationPageProperty); }
-            set { SetValue(NavigationPageProperty, value); }
-        }
+        public Type NavigationPage { get; set; }
+
         public LeftNavItemControl()
         {
             this.InitializeComponent();
