@@ -1,14 +1,14 @@
 ﻿using OneBreak.Models;
 using System;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace OneBreak.Pages
 {
-    public sealed partial class NewsDetailPage : Page
+    public sealed partial class NewsDetailPage : BasePage
     {
         public NewsModel CurrentNews { get; set; }
+
         public NewsDetailPage()
         {
             this.InitializeComponent();
@@ -48,7 +48,7 @@ namespace OneBreak.Pages
             var news = App.NewsViewModel.News[index];
 
             CurrentNews = news;
-
+            
             await CurrentNews.LoadNewsBody();
 
         }
