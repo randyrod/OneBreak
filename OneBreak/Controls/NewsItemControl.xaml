@@ -13,14 +13,16 @@
         <x:Double x:Key="TitleFontSize">18</x:Double>
         <x:Double x:Key="DescriptionFontSize">12</x:Double>
         <x:Double x:Key="ProviderFontSize">10</x:Double>
+        <x:Double x:Key="NewsItemControlBackgroundOpacity">0.7</x:Double>
+        <Color x:Key="NewsItemControlBrush">#000</Color>
     </UserControl.Resources>
-    
+
     <Grid>
-        <Image Stretch="Uniform" Source="{Binding CoverArtImageUrl}"/>
+        <local:NewsImageControl ImageSrc="{Binding CoverArtImageUrl, Mode=OneWay}"/>
         <Rectangle Fill="#000" Opacity="0.5"/>
         <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
             <StackPanel.Background>
-                <SolidColorBrush Color="#000" Opacity="0.7"/>
+                <SolidColorBrush Color="{ThemeResource NewsItemControlBrush}" Opacity="{ThemeResource NewsItemControlBackgroundOpacity}"/>
             </StackPanel.Background>
             <TextBlock Text="{Binding Title}" Style="{ThemeResource TextBlockForegroundPrimary}" Margin="10, 0" FontSize="{ThemeResource TitleFontSize}"/>
             <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Style="{ThemeResource TextBlockForegroundSecondary}" FontSize="{ThemeResource DescriptionFontSize}" Margin="10, 0"/>
