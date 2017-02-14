@@ -118,6 +118,9 @@
     <Compile Include="Models\GpuRssModel.cs" />
     <Compile Include="Models\NewsModel.cs" />
     <Compile Include="Models\RaceModel.cs" />
+    <Compile Include="Pages\BasePage.xaml.cs">
+      <DependentUpon>BasePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\NewsDetailPage.xaml.cs">
       <DependentUpon>NewsDetailPage.xaml</DependentUpon>
     </Compile>
@@ -167,6 +170,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\BasePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\NewsDetailPage.xaml">
       <SubType>Designer</SubType>
