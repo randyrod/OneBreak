@@ -96,6 +96,13 @@ namespace OneBreak
         }
 
         private const string ResourcesKey = "Resources";
+
+        /// <summary>
+        /// Get textual string from resource dictionary using key
+        /// </summary>
+        /// <param name="key">text key for dictionary</param>
+        /// <param name="fromUiTread">Retrieve key in the UI thread</param>
+        /// <returns></returns>
         public static async Task<string> GetStringFromResources(string key, bool fromUiTread = true)
         {
             if (string.IsNullOrEmpty(key)) return null;
