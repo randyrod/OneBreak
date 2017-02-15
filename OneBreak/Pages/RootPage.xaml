@@ -1,0 +1,89 @@
+﻿<pages:BasePage
+    x:Class="OneBreak.Pages.RootPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OneBreak.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:OneBreak.Controls"
+    xmlns:triggers="using:OneBreak.StateTriggers"
+    xmlns:pages="using:OneBreak.Pages"
+    mc:Ignorable="d">
+
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:DeviceFamilyTrigger DeviceFamily="Windows.Desktop"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="BaseSplitView.Visibility" Value="Visible"/>
+                        <Setter Target="RootFrame.Margin" Value="48,0,0,0"/>
+                        <Setter Target="HamburgerButtonPanel.Visibility" Value="Visible"/>
+                        <Setter Target="AppsCommandBar.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:DeviceFamilyTrigger DeviceFamily="Windows.Mobile"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="BottomAppBar.Visibility" Value="Visible"/>
+                        <Setter Target="RootFrame.Margin" Value="0,0,0,30"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Frame x:Name="RootFrame"/>
+
+        <SplitView x:Name="BaseSplitView" IsPaneOpen="False" PaneClosed="BaseSplitView_OnClosed"
+                   DisplayMode="CompactOverlay" Visibility="Collapsed" x:DeferLoadStrategy="Lazy">
+            <SplitView.Pane>
+                <StackPanel>
+                    <StackPanel x:Name="HamburgerButtonPanel" Visibility="Collapsed" x:DeferLoadStrategy="Lazy">
+                        <ToggleButton x:Name="HamburgerButton" Click="HamburgerButton_OnClick">
+                            <ToggleButton.Content>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Rectangle Fill="White" Margin="2, 3" HorizontalAlignment="Center" Width="24" Height="2"/>
+                                    <Rectangle Fill="White" Margin="2, 3" HorizontalAlignment="Center" Width="24" Height="2"/>
+                                    <Rectangle Fill="White" Margin="2, 3" HorizontalAlignment="Center" Width="24" Height="2"/>
+                                </StackPanel>
+                            </ToggleButton.Content>
+                        </ToggleButton>
+                    </StackPanel>
+
+                    <ListView IsItemClickEnabled="True" SelectionMode="Single" ItemClick="LeftNavItem_OnClick">
+                        <ListViewItem>
+                            <controls:LeftNavItemControl x:Name="NewsLeftNavItem" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                 ItemText="News" IconData="{StaticResource NewsIcon}"/>
+                        </ListViewItem>
+                        <ListViewItem>
+                            <controls:LeftNavItemControl x:Name="DriversLeftNavItem" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                 ItemText="Drivers" IconData="{StaticResource DriverIcon}"/>
+                        </ListViewItem>
+                    </ListView>
+                </StackPanel>
+            </SplitView.Pane>
+        </SplitView>
+    </Grid>
+
+    <pages:BasePage.BottomAppBar>
+        <CommandBar x:Name="AppsCommandBar" Visibility="Collapsed" x:DeferLoadStrategy="Lazy">
+            <AppBarButton Label="News" Click="CommandBarNewsButton_OnClick">
+                <AppBarButton.Content>
+                    <Path Data="{StaticResource NewsIcon}" Stretch="Uniform" Stroke="White" 
+                          StrokeThickness="1" StrokeLineJoin="Round"/>
+                </AppBarButton.Content>
+            </AppBarButton>
+            
+            <AppBarButton Label="Drivers">
+                <AppBarButton.Content>
+                    <Path Data="{StaticResource DriverIcon}" Stretch="Uniform" Stroke="White" 
+                          StrokeThickness="1" StrokeLineJoin="Round"/>
+                </AppBarButton.Content>
+            </AppBarButton>
+        </CommandBar>
+    </pages:BasePage.BottomAppBar>
+</pages:BasePage>
