@@ -8,20 +8,21 @@ namespace OneBreak.Helpers
     {
         public static async Task<string> GetChacheContent(string fileName, string folderName)
         {
-            var cacheFolder = await GetCacheFolder(fileName);
+            var cacheFolder = await GetCacheFolder(folderName);
 
             if (cacheFolder == null) return null;
 
-            var cacheFile = await cacheFolder.GetFileAsync(fileName);
+            var cacheFile = await GetCacheFile(fileName, cacheFolder);
 
             if (cacheFile == null) return null;
 
             try
             {
                 var content = await FileIO.ReadTextAsync(cacheFile);
+
                 return content;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //todo: log ex
                 return null;
@@ -41,6 +42,7 @@ namespace OneBreak.Helpers
             var cacheFile = await GetCacheFile(fileName, cacheFolder);
 
             if (cacheFile == null) return;
+
             try
             {
                 await FileIO.WriteTextAsync(cacheFile, content);
@@ -59,7 +61,7 @@ namespace OneBreak.Helpers
             {
                 var localFolder = ApplicationData.Current.LocalFolder;
 
-                var folder = await localFolder.CreateFolderAsync(folderName, CreationCollisionOption.ReplaceExisting);
+                var folder = await localFolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
 
                 return folder;
             }
