@@ -43,6 +43,7 @@ namespace OneBreak.Models
                 OnPropertyChanged();
             }
         }
+
         private bool _loading;
         public bool Loading
         {
@@ -54,6 +55,18 @@ namespace OneBreak.Models
             {
                 if (_loading == value) return;
                 _loading = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _starred;
+        public bool Starred
+        {
+            get { return _starred; }
+            set
+            {
+                if (_starred == value) return;
+                _starred = value;
                 OnPropertyChanged();
             }
         }

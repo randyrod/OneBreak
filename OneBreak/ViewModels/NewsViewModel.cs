@@ -8,7 +8,7 @@ namespace OneBreak.ViewModels
 {
     public class NewsViewModel : ViewModelBase
     {
-        private bool _loading, _newsLoading;
+        private bool _loading, _newsLoading, _starredLoading;
         private const string GpuProviderKey = "ProviderGpu";
 
         private StarredNewsCacheHelper _starredCacheHelper = new StarredNewsCacheHelper();
@@ -30,6 +30,17 @@ namespace OneBreak.ViewModels
             {
                 if (_newsLoading == value) return;
                 _newsLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool StarredLoading
+        {
+            get { return _starredLoading; }
+            set
+            {
+                if (_starredLoading == value) return;
+                _starredLoading = value;
                 OnPropertyChanged();
             }
         }
@@ -72,10 +83,18 @@ namespace OneBreak.ViewModels
 
             //Note: this solution should be temporary, do not leave it here plz!!! :)
             var gpuProviderText = await App.GetStringFromResources(GpuProviderKey, false);
-            
-            if (result == null || result.Count <= 0) return;
 
-            if (News.Count > 0 && News[0].Title == result[0].Title) return;
+            if (result == null || result.Count <= 0)
+            {
+                Loading = false;
+                return;
+            }
+
+            if (News.Count > 0 && News[0].Title == result[0].Title)
+            {
+                Loading = false;
+                return;
+            }
 
             foreach (var item in result)
             {
@@ -88,28 +107,66 @@ namespace OneBreak.ViewModels
 
         public async Task LoadStarredNews()
         {
+            StarredLoading = true;
             var list = await _starredCacheHelper.ReadStarredCache();
 
-            if (list == null || list.Count <= 0) return;
+            if (list == null || list.Count <= 0)
+            {
+                StarredLoading = false;
+                return;
+            }
 
             foreach (var item in list)
             {
-                StarredNews.Add(item);
+                var toAdd = item;
+                foreach (var current in News)
+                {
+                    if(item.Title == current.Title)
+                    {
+                        toAdd = current;
+                        toAdd.Starred = true;
+                        break;
+                    }
+                }
+                StarredNews.Add(toAdd);
+            }
+            StarredLoading = false;
+        }
+
+        public void StarUnstarNews(NewsModel news)
+        {
+
+            if(news.Starred)
+            {
+                UnstarNews(news);
+            }
+            else
+            {
+                StarNews(news);
             }
         }
 
-        public bool StarNews(NewsModel starred)
+        private async Task<bool> StarNews(NewsModel starred)
         {
-            if (starred == null) return false;
+            if (starred == null || StarredNews.Contains(starred)) return false;
+
+            if(string.IsNullOrEmpty(starred.NewsBody))
+            {
+                await starred.LoadNewsBody();
+            }
+
+            starred.Starred = true;
             StarredNews.Add(starred);
             SaveStarredCache();
             return true;
         }
 
-        public bool UnstarNews(NewsModel unstarred)
+        private bool UnstarNews(NewsModel unstarred)
         {
             if (unstarred == null || !StarredNews.Contains(unstarred)) return false;
             var result = StarredNews.Remove(unstarred);
+
+            unstarred.Starred = false;
 
             if(result)
             {
@@ -119,13 +176,11 @@ namespace OneBreak.ViewModels
             return result;
         }
 
-        private void SaveStarredCache()
+        private async void SaveStarredCache()
         {
             var currentList = StarredNews.ToList();
 
-            _starredCacheHelper.SaveStarredCache(currentList);
+            await _starredCacheHelper.SaveStarredCache(currentList);
         }
-
-
     }
 }

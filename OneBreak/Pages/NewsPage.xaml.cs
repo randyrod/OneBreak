@@ -20,6 +20,9 @@ namespace OneBreak.Pages
             NewsViewModel = App.NewsViewModel;
 
             await App.NewsViewModel.LoadNews();
+
+            await App.NewsViewModel.LoadStarredNews();
+
         }
 
         private void NewsItem_OnClick(object sender, Windows.UI.Xaml.Controls.ItemClickEventArgs e)
@@ -32,6 +35,13 @@ namespace OneBreak.Pages
 
             if (idx == -1) return;
             NewsDetailFrame.Navigate(typeof(NewsDetailPage), idx);
+        }
+
+        private void NewsItemControl_OnStarredToggleClick(NewsModel news)
+        {
+            if (news == null) return;
+
+            NewsViewModel.StarUnstarNews(news);
         }
     }
 }

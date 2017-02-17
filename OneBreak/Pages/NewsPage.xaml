@@ -8,9 +8,18 @@
     xmlns:controls="using:OneBreak.Controls"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <Style x:Key="NewsListViewStyle" TargetType="ListViewItem">
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <DataTemplate x:Key="NewsListViewTemplate">
+            <controls:NewsItemControl HorizontalAlignment="Stretch" OnStarredToggleClick="NewsItemControl_OnStarredToggleClick"/>
+        </DataTemplate>
+    </Page.Resources>
     <Grid>
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
+            <VisualStateGroup x:Name="VisualStateTriggers">
                 <VisualState x:Name="DesktopState1">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1024"/>
@@ -41,28 +50,33 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="MasterColumn" Width="460"/>
             <ColumnDefinition x:Name="DetailColumn" Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ListView Grid.Column="0" x:Name="NewsTitles" IsItemClickEnabled="True" ItemClick="NewsItem_OnClick" SelectionMode="Single" 
-                  ItemsSource="{x:Bind NewsViewModel.News, Mode=OneWay}">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Padding" Value="6"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            
-            
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <controls:NewsItemControl HorizontalAlignment="Stretch"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <TextBlock Text="News" Margin="10" Grid.Row="0"/>
 
-        <Frame x:Name="NewsDetailFrame" Grid.Column="1"/>
+        <ProgressBar IsIndeterminate="True" Foreground="Teal" 
+                     IsEnabled="{x:Bind NewsViewModel.Loading, Mode=OneWay}"
+                     Visibility="{x:Bind NewsViewModel.Loading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
+
+        <Pivot Grid.Column="0" Grid.Row="1">
+            <PivotItem Header="Current News">
+                <ListView x:Name="NewsTitles" IsItemClickEnabled="True" ItemClick="NewsItem_OnClick" SelectionMode="Single" 
+                  ItemsSource="{x:Bind NewsViewModel.News, Mode=OneWay}" ItemContainerStyle="{ThemeResource NewsListViewStyle}"
+                          ItemTemplate="{StaticResource NewsListViewTemplate}"/>
+            </PivotItem>
+            <PivotItem Header="Starred News">
+                <ListView x:Name="StarredNewsTitles" IsItemClickEnabled="True" ItemClick="NewsItem_OnClick" SelectionMode="Single" 
+                  ItemsSource="{x:Bind NewsViewModel.StarredNews, Mode=OneWay}" ItemContainerStyle="{ThemeResource NewsListViewStyle}"
+                          ItemTemplate="{StaticResource NewsListViewTemplate}"/>
+            </PivotItem>
+        </Pivot>
+        <Frame x:Name="NewsDetailFrame" Grid.Row="1" Grid.Column="1"/>
     </Grid>
 </Page>

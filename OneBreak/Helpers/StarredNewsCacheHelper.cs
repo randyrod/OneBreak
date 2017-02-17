@@ -9,7 +9,7 @@ namespace OneBreak.Helpers
     public class StarredNewsCacheHelper
     {
         private const string _starredCacheFolder = "StarredNews";
-        private const string _starredNewsFile = "StarredCache";
+        private const string _starredNewsFile = "StarredCache.json";
 
         public async Task SaveStarredCache(List<NewsModel> newsList)
         {
