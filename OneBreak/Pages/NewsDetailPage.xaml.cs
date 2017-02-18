@@ -1,6 +1,8 @@
-﻿using OneBreak.Models;
+﻿using OneBreak.Helpers;
+using OneBreak.Models;
 using System;
 using System.Threading.Tasks;
+using Windows.Networking.Connectivity;
 using Windows.UI.Xaml.Navigation;
 
 namespace OneBreak.Pages
@@ -9,6 +11,9 @@ namespace OneBreak.Pages
     {
         public NewsModel CurrentNews { get; set; }
 
+        private bool _onConnectedRegistered;
+
+        private int _pendingNewsLoad;
         public NewsDetailPage()
         {
             this.InitializeComponent();
@@ -34,7 +39,21 @@ namespace OneBreak.Pages
                 return;
             }
 
-            LoadNewsBody(idx);
+            if(ConnectionHelper.IsConnected)
+            {
+                LoadNewsBody(idx);
+            }
+            else
+            {
+                _pendingNewsLoad = idx;
+                RegisterOnConnected();
+            }
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            UnregisterOnConnected();
         }
 
         private async Task LoadNewsBody(int index)
@@ -52,5 +71,34 @@ namespace OneBreak.Pages
             await CurrentNews.LoadNewsBody();
 
         }
+
+        #region Events
+        private void RegisterOnConnected()
+        {
+            if (_onConnectedRegistered) return;
+
+            NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
+
+            _onConnectedRegistered = true;
+        }
+
+        private void UnregisterOnConnected()
+        {
+            if (!_onConnectedRegistered) return;
+
+            NetworkInformation.NetworkStatusChanged -= NetworkInformation_NetworkStatusChanged;
+
+            _onConnectedRegistered = false;
+        }
+
+        private void NetworkInformation_NetworkStatusChanged(object sender)
+        {
+            if (!ConnectionHelper.IsConnected) return;
+
+            LoadNewsBody(_pendingNewsLoad);
+
+            UnregisterOnConnected();
+        }
+        #endregion
     }
 }
