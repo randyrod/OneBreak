@@ -92,7 +92,7 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="OneBreak_StoreKey.pfx" />
     <None Include="project.json" />
-    <PRIResource Include="Resources\Strings\en\Resources.resw" />
+    <PRIResource Include="Resources\Strings\en\en-US\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
