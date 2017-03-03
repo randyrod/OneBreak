@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace OneBreak.Models
 {
@@ -32,7 +33,7 @@ namespace OneBreak.Models
         public string Provider { get; set; }
 
         private bool _loadSuccess;
-
+        [JsonIgnore]
         public bool LoadSuccess
         {
             get { return _loadSuccess; }
@@ -45,6 +46,7 @@ namespace OneBreak.Models
         }
 
         private bool _loading;
+        [JsonIgnore]
         public bool Loading
         {
             get
@@ -71,6 +73,19 @@ namespace OneBreak.Models
             }
         }
 
+        private bool _loadingFailed;
+        [JsonIgnore]
+        public bool LoadingFailed
+        {
+            get { return _loadingFailed; }
+            set
+            {
+                if (_loadingFailed == value) return;
+                _loadingFailed = value;
+                OnPropertyChanged();
+            }
+        }
+
         public async Task<bool> LoadNewsBody()
         {
             Loading = true;
@@ -85,6 +100,7 @@ namespace OneBreak.Models
             if (newsBody == null)
             {
                 Loading = false;
+                
                 return false;
             }
 
@@ -93,6 +109,7 @@ namespace OneBreak.Models
             if (newsBody == null)
             {
                 Loading = false;
+                LoadingFailed = true;
                 return false;
             }
 
@@ -114,7 +131,7 @@ namespace OneBreak.Models
                 var textualDiv = htmlDoc.DocumentNode.Descendants("div")
                     .Where(x => x.Attributes.Contains("class") && x.Attributes[0].Value == "textual");
 
-                if (textualDiv == null) return null; //Log Error
+                if (textualDiv == null || !textualDiv.Any()) return null; //Log Error
 
                 var textualDivHtmlContent = textualDiv.FirstOrDefault().InnerHtml;
 
@@ -142,7 +159,7 @@ namespace OneBreak.Models
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -185,7 +202,7 @@ namespace OneBreak.Models
 
                 return rawBody;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
