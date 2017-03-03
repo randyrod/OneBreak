@@ -70,6 +70,18 @@ namespace OneBreak.ViewModels
             }
         }
 
+        private NewsModel _lastSelectedNews;
+        public NewsModel LastSelectedNews
+        {
+            get { return _lastSelectedNews; }
+            set
+            {
+                if (_lastSelectedNews == value) return;
+                _lastSelectedNews = value;
+                OnPropertyChanged();
+            }
+        }
+
         public NewsViewModel()
         {
             _news = new ObservableCollection<NewsModel>();
@@ -124,10 +136,10 @@ namespace OneBreak.ViewModels
                     if(item.Title == current.Title)
                     {
                         toAdd = current;
-                        toAdd.Starred = true;
                         break;
                     }
                 }
+                toAdd.Starred = true;
                 StarredNews.Add(toAdd);
             }
             StarredLoading = false;
