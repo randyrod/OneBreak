@@ -110,6 +110,7 @@
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
+    <Compile Include="Helpers\DeviceFamilyHelper.cs" />
     <Compile Include="Helpers\NewsRequestHelper.cs" />
     <Compile Include="Helpers\StarredNewsCacheHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
