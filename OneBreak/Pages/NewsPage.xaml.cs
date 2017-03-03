@@ -3,6 +3,7 @@ using OneBreak.Models;
 using OneBreak.ViewModels;
 using Windows.Networking.Connectivity;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 namespace OneBreak.Pages
@@ -11,7 +12,9 @@ namespace OneBreak.Pages
     {
         public NewsViewModel NewsViewModel { get; set; }
 
-        private bool _onConnectedRegistered;
+        private bool _onConnectedRegistered, _registeredForNewsBody;
+
+        private const double MasterColumnWidth = 460;
 
         public NewsPage()
         {
@@ -23,8 +26,13 @@ namespace OneBreak.Pages
             base.OnNavigatedTo(e);
 
             NewsViewModel = App.NewsViewModel;
+            if(NewsViewModel.LastSelectedNews == null)
+            {
+                //If it is null, binding doesn't work, as the progress bar has nothing to bind to and defaults to visible
+                NewsViewModel.LastSelectedNews = new NewsModel();
+            }
 
-            if(ConnectionHelper.IsConnected)
+            if(ConnectionHelper.IsConnected && !NewsViewModel.Loading)
             {
                 LoadNews();
             }
@@ -48,22 +56,31 @@ namespace OneBreak.Pages
             await App.NewsViewModel.LoadStarredNews();
         }
 
-        private void NewsItem_OnClick(object sender, Windows.UI.Xaml.Controls.ItemClickEventArgs e)
+        private async void NewsItem_OnClick(object sender, ItemClickEventArgs e)
         {
             var news = e.ClickedItem as NewsModel;
 
             if (news == null) return;
 
-            var idx = App.NewsViewModel.News.IndexOf(news);
+            NewsViewModel.LastSelectedNews = news;
 
-            if (idx == -1) return;
-
-            if(VisualStateTriggers.CurrentState == MobileState)
+            if (VisualStateTriggers.CurrentState == MobileState)
             {
-                Frame.Navigate(typeof(NewsDetailPage), idx);
+                Frame.Navigate(typeof(NewsDetailPage));
                 return;
             }
-            NewsDetailFrame.Navigate(typeof(NewsDetailPage), idx);
+
+            if (!string.IsNullOrEmpty(NewsViewModel.LastSelectedNews.NewsBody) || NewsViewModel.LastSelectedNews.Loading) return;
+
+            if(ConnectionHelper.IsConnected)
+            {
+                await NewsViewModel.LastSelectedNews.LoadNewsBody();
+            }
+            else
+            {
+                RegisterOnConnectedEvent();
+                _registeredForNewsBody = true;
+            }
         }
 
         private void NewsItemControl_OnStarredToggleClick(NewsModel news)
@@ -86,11 +103,20 @@ namespace OneBreak.Pages
         {
             if (!ConnectionHelper.IsConnected) return;
 
-            LoadNews();
+            if(_registeredForNewsBody)
+            {
+                if(string.IsNullOrEmpty(NewsViewModel.LastSelectedNews.NewsBody))
+                {
+                    NewsViewModel.LastSelectedNews.LoadNewsBody();
+                    _registeredForNewsBody = false;
+                }
+            }
+            else
+            {
+                LoadNews();
+            }
 
             UnregisterOnConnectedEvent();
-
-            _onConnectedRegistered = false;
         }
 
         private void UnregisterOnConnectedEvent()
@@ -102,5 +128,13 @@ namespace OneBreak.Pages
             _onConnectedRegistered = false;
         }
         #endregion
+
+        private void VisualStateTriggers_CurrentStateChanged(object sender, Windows.UI.Xaml.VisualStateChangedEventArgs e)
+        {
+            if(e.NewState == MobileState && (e.OldState == DesktopState || e.OldState == DesktopState1) && !string.IsNullOrEmpty(NewsViewModel.LastSelectedNews.NewsBody))
+            {
+                Frame.Navigate(typeof(NewsDetailPage), null, new SuppressNavigationTransitionInfo());
+            }
+        }
     }
 }
