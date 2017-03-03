@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using OneBreak.Helpers;
+using Windows.UI.Xaml;
 
 namespace OneBreak.StateTriggers
 {
@@ -12,9 +13,7 @@ namespace OneBreak.StateTriggers
             set
             {
                 _queriedDeviceFamily = value;
-                _currentDeviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
-
-                SetActive(_queriedDeviceFamily == _currentDeviceFamily);
+                SetActive(_queriedDeviceFamily == DeviceFamilyHelper.CurrentDeviceFamily);
             }
         }
     }
