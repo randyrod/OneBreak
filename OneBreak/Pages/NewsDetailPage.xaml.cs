@@ -3,6 +3,8 @@ using OneBreak.Models;
 using System;
 using System.Threading.Tasks;
 using Windows.Networking.Connectivity;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace OneBreak.Pages
@@ -11,9 +13,8 @@ namespace OneBreak.Pages
     {
         public NewsModel CurrentNews { get; set; }
 
-        private bool _onConnectedRegistered;
+        private bool _onConnectedRegistered, _backButtonRegistered;
 
-        private int _pendingNewsLoad;
         public NewsDetailPage()
         {
             this.InitializeComponent();
@@ -22,54 +23,32 @@ namespace OneBreak.Pages
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if(e.Parameter == null)
-            {
-                //Show Error Message
-                return;
-            }
 
-            int idx = -1;
-            try
-            {
-                idx = (int)e.Parameter;
-            }
-            catch (Exception)
-            {
-                //Show Error Message
-                return;
-            }
+            CurrentNews = App.NewsViewModel.LastSelectedNews;
 
-            if(ConnectionHelper.IsConnected)
-            {
-                LoadNewsBody(idx);
-            }
-            else
-            {
-                _pendingNewsLoad = idx;
-                RegisterOnConnected();
-            }
+            LoadNewsBody();
+
+            RegisterBackButton();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
             UnregisterOnConnected();
+            UnregisterBackButton();
         }
 
-        private async Task LoadNewsBody(int index)
+        private async Task LoadNewsBody()
         {
-            if(index <= -1 || index >= App.NewsViewModel.News.Count)
+            if (!string.IsNullOrEmpty(CurrentNews.NewsBody) || CurrentNews.Loading) return;
+            if (ConnectionHelper.IsConnected)
             {
-                //Show Error Message
-                return;
+                await CurrentNews.LoadNewsBody();
             }
-
-            var news = App.NewsViewModel.News[index];
-
-            CurrentNews = news;
-            
-            await CurrentNews.LoadNewsBody();
-
+            else
+            {
+                RegisterOnConnected();
+            }
         }
 
         #region Events
@@ -95,10 +74,75 @@ namespace OneBreak.Pages
         {
             if (!ConnectionHelper.IsConnected) return;
 
-            LoadNewsBody(_pendingNewsLoad);
+            LoadNewsBody();
 
             UnregisterOnConnected();
         }
+
+        private void RegisterBackButton()
+        {
+            if (_backButtonRegistered) return;
+
+            var navigationManager = SystemNavigationManager.GetForCurrentView();
+            navigationManager.BackRequested += NavigationManager_BackRequested;
+            if(DeviceFamilyHelper.CurrentDeviceFamily == "Desktop")
+            {
+                navigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            }
+
+            _backButtonRegistered = true;
+        }
+
+        private void UnregisterBackButton()
+        {
+            if (!_backButtonRegistered) return;
+            var navigationManager = SystemNavigationManager.GetForCurrentView();
+            navigationManager.BackRequested -= NavigationManager_BackRequested;
+
+            if (DeviceFamilyHelper.CurrentDeviceFamily == "Desktop")
+            {
+                navigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+            }
+
+            _backButtonRegistered = false;
+        }
+
+        private void NavigationManager_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            if(Frame.CanGoBack)
+            {
+                Frame.GoBack();
+                e.Handled = true;
+            }
+        }
         #endregion
+
+        private void NewsDetailPage_SizeChanged(object sender, Windows.UI.Xaml.SizeChangedEventArgs e)
+        {
+            if(e.NewSize.Width >= 720)
+            {
+                if(Frame.CanGoBack)
+                {
+                    Frame.GoBack();
+                }
+            }
+        }
+
+        private void ViewOriginalButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(CurrentNews.OriginalUrl)) return;
+            CurrentNews.LoadingFailed = false;
+
+            var webView = NewsWebView ?? (WebView)FindName("NewsWebView");
+
+            if (webView == null)
+            {
+                CurrentNews.LoadingFailed = true;
+                return;
+            }
+
+            webView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            webView.Navigate(new Uri(CurrentNews.OriginalUrl));
+        }
     }
 }

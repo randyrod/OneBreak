@@ -6,20 +6,23 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="using:OneBreak.Pages"
-    mc:Ignorable="d">
+    xmlns:models="using:OneBreak.Models"
+    mc:Ignorable="d"
+    SizeChanged="NewsDetailPage_SizeChanged">
 
     <Grid>
-        <ScrollViewer>
-            <StackPanel>
-                <Image Grid.Row="0" Source="{x:Bind CurrentNews.CoverArtImageUrl, Mode=OneWay}" Margin="20, 0" VerticalAlignment="Top"/>
+        <ContentPresenter x:Name="NewsContentPresenter"
+                          Content="{x:Bind CurrentNews, Mode=OneWay}"
+                          ContentTemplate="{StaticResource NewsDetailPresenterTemplate}"/>
 
-                <ProgressBar IsIndeterminate="True" Foreground="Red" Margin="10" 
-                             Visibility="{x:Bind CurrentNews.Loading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
-                             IsEnabled="{x:Bind CurrentNews.Loading, Mode=OneWay}"/>
-                
-                <TextBlock x:Name="NewsText" Text="{x:Bind CurrentNews.NewsBody, Mode=OneWay}" HorizontalAlignment="Center"
-                    TextWrapping="WrapWholeWords" Margin="20"/>
+        <Grid Background="Black" Visibility="{x:Bind CurrentNews.LoadingFailed, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="We couldn't load it" HorizontalAlignment="Center" FontWeight="SemiBold" 
+                           Margin="10" Style="{ThemeResource TextBlockForegroundPrimary}"/>
+                <Button Content="View Original" HorizontalAlignment="Center" Margin="10" Click="ViewOriginalButton_Click"/>
             </StackPanel>
-        </ScrollViewer>
+        </Grid>
+
+        <WebView x:Name="NewsWebView" Visibility="Collapsed" x:DeferLoadStrategy="Lazy"/>
     </Grid>
 </pages:BasePage>
