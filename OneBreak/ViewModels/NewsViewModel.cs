@@ -1,5 +1,6 @@
 ﻿using OneBreak.Helpers;
 using OneBreak.Models;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -128,17 +129,38 @@ namespace OneBreak.ViewModels
                 return;
             }
 
+            var mustAdd = new List<NewsModel>();
+
+            if(StarredNews != null && StarredNews.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    var exists = StarredNews.FirstOrDefault(n => n.Title == item.Title);
+                    if(exists == null)
+                    {
+                        mustAdd.Add(item);
+                    }
+                }
+
+                if (mustAdd.Count > 0)
+                {
+                    list = mustAdd;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
             foreach (var item in list)
             {
                 var toAdd = item;
-                foreach (var current in News)
+                var exists = News.FirstOrDefault(n => n.Title == item.Title);
+                if(exists != null)
                 {
-                    if(item.Title == current.Title)
-                    {
-                        toAdd = current;
-                        break;
-                    }
+                    toAdd = exists;
                 }
+                
                 toAdd.Starred = true;
                 StarredNews.Add(toAdd);
             }
