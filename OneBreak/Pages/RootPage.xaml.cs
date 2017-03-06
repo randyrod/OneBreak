@@ -31,6 +31,8 @@ namespace OneBreak.Pages
 
         private void InitializeNavigationItems()
         {
+            if (NewsLeftNavItem == null || NewsLeftNavItem.Visibility == Visibility.Collapsed) return;
+
             NewsLeftNavItem.NavigationPage = typeof(NewsPage);
         }
 
