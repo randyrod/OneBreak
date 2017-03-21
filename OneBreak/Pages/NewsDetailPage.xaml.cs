@@ -40,10 +40,11 @@ namespace OneBreak.Pages
 
         private async Task LoadNewsBody()
         {
-            if (!string.IsNullOrEmpty(CurrentNews.NewsBody) || CurrentNews.Loading) return;
+            if ((CurrentNews.NewsContent != null && CurrentNews.NewsContent.Count > 0) || CurrentNews.Loading) return;
             if (ConnectionHelper.IsConnected)
             {
-                await CurrentNews.LoadNewsBody();
+                var loaded = await CurrentNews.LoadNewsBody();
+
             }
             else
             {
