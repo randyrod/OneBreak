@@ -101,6 +101,9 @@
     <Compile Include="Controls\LeftNavItemControl.xaml.cs">
       <DependentUpon>LeftNavItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NewsDetailControl.xaml.cs">
+      <DependentUpon>NewsDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NewsImageControl.xaml.cs">
       <DependentUpon>NewsImageControl.xaml</DependentUpon>
     </Compile>
@@ -161,6 +164,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Controls\LeftNavItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NewsDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
