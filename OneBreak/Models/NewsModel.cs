@@ -5,23 +5,25 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace OneBreak.Models
 {
     public class NewsModel : ViewModelBase
     {
+        private const string NewsBodyParagraphTag = "p", NewsBodyImageTag = "img", NewsBodyHrefTag = "href";
         public string Title { get; set; }
 
         public string Description { get; set; }
 
-        private string _newsBody;
-        public string NewsBody
+        private List<KeyValuePair<string, string>> _newsContent;
+        public List<KeyValuePair<string,string>> NewsContent
         {
-            get { return _newsBody; }
+            get { return _newsContent; }
             set
             {
-                if (_newsBody == value) return;
-                _newsBody = value;
+                if (_newsContent == value) return;
+                _newsContent = value;
                 OnPropertyChanged();
             }
         }
@@ -89,7 +91,7 @@ namespace OneBreak.Models
         public async Task<bool> LoadNewsBody()
         {
             Loading = true;
-            if (!string.IsNullOrEmpty(NewsBody))
+            if (NewsContent != null && NewsContent.Count > 0)
             {
                 Loading = false;
                 return true;
@@ -104,26 +106,24 @@ namespace OneBreak.Models
                 return false;
             }
 
-            newsBody = SanitizeNewsBody(newsBody);
-
-            if (newsBody == null)
+            var newsContent = ParseNewsBody(newsBody);
+            
+            if(newsContent == null)
             {
                 Loading = false;
                 LoadingFailed = true;
                 return false;
             }
 
-            NewsBody = newsBody;
-
+            NewsContent = newsContent;
             Loading = false;
             return true;
         }
 
-        private string SanitizeNewsBody(string rawHtml)
+        private List<KeyValuePair<string, string>> ParseNewsBody(string rawHtml)
         {
             try
             {
-
                 var htmlDoc = new HtmlAgilityPack.HtmlDocument();
 
                 htmlDoc.LoadHtml(rawHtml);
@@ -147,17 +147,25 @@ namespace OneBreak.Models
 
                 var descendantNodes = htmlDoc.DocumentNode.Descendants();
 
-                var result = "";
-
+                var newsContent = new List<KeyValuePair<string,string>>();
+                
                 foreach (var node in descendantNodes)
                 {
-                    if(node.Name == "p")
+                    if (node.Name == NewsBodyParagraphTag)
                     {
-                        result += node.InnerText;
+                        newsContent.Add(new KeyValuePair<string, string>(NewsBodyParagraphTag, node.InnerText));
+                    }
+                    else if (node.Name == NewsBodyImageTag)
+                    {
+                        var x = node.Attributes;
+                        if (node.Attributes.Contains(NewsBodyHrefTag))
+                        {
+                            newsContent.Add(new KeyValuePair<string, string>(NewsBodyImageTag, node.Attributes[NewsBodyHrefTag].Value));
+                        }
                     }
                 }
 
-                return result;
+                return newsContent;
             }
             catch (Exception ex)
             {
