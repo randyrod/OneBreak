@@ -70,7 +70,8 @@ namespace OneBreak.Pages
                 return;
             }
 
-            if (!string.IsNullOrEmpty(NewsViewModel.LastSelectedNews.NewsBody) || NewsViewModel.LastSelectedNews.Loading) return;
+            if ((NewsViewModel.LastSelectedNews.NewsContent != null && NewsViewModel.LastSelectedNews.NewsContent.Count > 0) || 
+                NewsViewModel.LastSelectedNews.Loading) return;
 
             if(ConnectionHelper.IsConnected)
             {
@@ -105,7 +106,8 @@ namespace OneBreak.Pages
 
             if(_registeredForNewsBody)
             {
-                if(string.IsNullOrEmpty(NewsViewModel.LastSelectedNews.NewsBody))
+                if(NewsViewModel.LastSelectedNews.NewsContent == null || 
+                    NewsViewModel.LastSelectedNews.NewsContent.Count <= 0)
                 {
                     NewsViewModel.LastSelectedNews.LoadNewsBody();
                     _registeredForNewsBody = false;
@@ -131,7 +133,8 @@ namespace OneBreak.Pages
 
         private void VisualStateTriggers_CurrentStateChanged(object sender, Windows.UI.Xaml.VisualStateChangedEventArgs e)
         {
-            if(e.NewState == MobileState && (e.OldState == DesktopState || e.OldState == DesktopState1) && !string.IsNullOrEmpty(NewsViewModel.LastSelectedNews.NewsBody))
+            if(e.NewState == MobileState && (e.OldState == DesktopState || e.OldState == DesktopState1) 
+                && (NewsViewModel.LastSelectedNews.NewsContent != null && NewsViewModel.LastSelectedNews.NewsContent.Count >= 0))
             {
                 Frame.Navigate(typeof(NewsDetailPage), null, new SuppressNavigationTransitionInfo());
             }

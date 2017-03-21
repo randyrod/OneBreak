@@ -184,7 +184,7 @@ namespace OneBreak.ViewModels
         {
             if (starred == null || StarredNews.Contains(starred)) return false;
 
-            if(string.IsNullOrEmpty(starred.NewsBody))
+            if(starred.NewsContent == null || starred.NewsContent.Count <= 0)
             {
                 await starred.LoadNewsBody();
             }
