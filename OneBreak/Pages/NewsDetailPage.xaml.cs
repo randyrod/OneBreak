@@ -86,7 +86,7 @@ namespace OneBreak.Pages
 
             var navigationManager = SystemNavigationManager.GetForCurrentView();
             navigationManager.BackRequested += NavigationManager_BackRequested;
-            if(DeviceFamilyHelper.CurrentDeviceFamily == "Desktop")
+            if(DeviceFamilyHelper.CurrentDeviceFamily == "Windows.Desktop")
             {
                 navigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             }
@@ -100,7 +100,7 @@ namespace OneBreak.Pages
             var navigationManager = SystemNavigationManager.GetForCurrentView();
             navigationManager.BackRequested -= NavigationManager_BackRequested;
 
-            if (DeviceFamilyHelper.CurrentDeviceFamily == "Desktop")
+            if (DeviceFamilyHelper.CurrentDeviceFamily == "Windows.Desktop")
             {
                 navigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
             }
@@ -134,7 +134,16 @@ namespace OneBreak.Pages
             if (string.IsNullOrEmpty(CurrentNews.OriginalUrl)) return;
             CurrentNews.LoadingFailed = false;
 
-            var webView = NewsWebView ?? (WebView)FindName("NewsWebView");
+            WebView webView;
+
+            if (NewsWebView == null || NewsWebView.Visibility == Windows.UI.Xaml.Visibility.Collapsed)
+            {
+                webView = (WebView)FindName("NewsWebView");
+            }
+            else
+            {
+                webView = NewsWebView;
+            }
 
             if (webView == null)
             {

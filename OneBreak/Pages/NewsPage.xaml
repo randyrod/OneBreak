@@ -14,7 +14,7 @@
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <DataTemplate x:Key="NewsListViewTemplate">
-            <controls:NewsItemControl HorizontalAlignment="Stretch" OnStarredToggleClick="NewsItemControl_OnStarredToggleClick"/>
+            <controls:NewsItemControl HorizontalAlignment="Stretch" MaxHeight="212" OnStarredToggleClick="NewsItemControl_OnStarredToggleClick"/>
         </DataTemplate>
     </Page.Resources>
     <Grid>
@@ -60,7 +60,7 @@
 
         <TextBlock Text="News" Margin="10" Grid.Row="0"/>
 
-        <ProgressBar IsIndeterminate="True" Foreground="Teal" 
+        <ProgressBar IsIndeterminate="True" Foreground="Teal" Grid.Row="1" VerticalAlignment="Top"
                      IsEnabled="{x:Bind NewsViewModel.Loading, Mode=OneWay}"
                      Visibility="{x:Bind NewsViewModel.Loading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
 
@@ -78,8 +78,18 @@
         </Pivot>
 
         <ContentPresenter Grid.Row="1" Grid.Column="1"
-                          x:Name="NewsDetailPresenter" 
+                          x:Name="NewsDetailPresenter"
                           Content="{x:Bind NewsViewModel.LastSelectedNews, Mode=OneWay}"
                           ContentTemplate="{StaticResource NewsDetailPresenterTemplate}"/>
+
+        <Grid Grid.Row="1" Grid.Column="1" Background="Black" Visibility="{x:Bind NewsViewModel.LastSelectedNews.LoadingFailed, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="We couldn't load it" HorizontalAlignment="Center" FontWeight="SemiBold" 
+                           Margin="10" Style="{ThemeResource TextBlockForegroundPrimary}"/>
+                <Button Content="View Web Page" HorizontalAlignment="Center" Margin="10" Click="ViewOriginalButton_Click"/>
+            </StackPanel>
+        </Grid>
+
+        <WebView Grid.Row="1" Grid.Column="1" x:Name="NewsWebView" Visibility="Collapsed" x:DeferLoadStrategy="Lazy"/>
     </Grid>
 </local:BasePage>

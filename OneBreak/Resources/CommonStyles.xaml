@@ -8,13 +8,15 @@
     <DataTemplate x:Key="NewsDetailPresenterTemplate">
         <ScrollViewer>
             <StackPanel>
-                <Image x:Name="CoverArt" MaxWidth="1024" Grid.Row="0" Source="{Binding CoverArtImageUrl, Mode=OneWay}" Margin="20, 0" VerticalAlignment="Top"/>
+                <Image x:Name="CoverArt" MaxWidth="1024" MaxHeight="600" Grid.Row="0" Source="{Binding CoverArtImageUrl, Mode=OneWay}" Margin="20, 0" VerticalAlignment="Top"/>
 
                 <ProgressBar IsIndeterminate="True" Foreground="Red" Margin="10" 
                              Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"
                              IsEnabled="{Binding Loading, Mode=OneWay}"/>
                 
-                <controls:NewsDetailControl MaxWidth="1024" HorizontalAlignment="Center" Margin="20" NewsContent="{Binding NewsContent, Mode=OneWay}"/>
+                <controls:NewsDetailControl MaxWidth="1024" HorizontalAlignment="Center" Margin="20" 
+                                            NewsContent="{Binding NewsContent, Mode=OneWay}"
+                                            Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityConverterInverse}}"/>
             </StackPanel>
         </ScrollViewer>
     </DataTemplate>

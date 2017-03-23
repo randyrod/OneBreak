@@ -1,6 +1,7 @@
 ﻿using OneBreak.Helpers;
 using OneBreak.Models;
 using OneBreak.ViewModels;
+using System;
 using Windows.Networking.Connectivity;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -26,13 +27,13 @@ namespace OneBreak.Pages
             base.OnNavigatedTo(e);
 
             NewsViewModel = App.NewsViewModel;
-            if(NewsViewModel.LastSelectedNews == null)
+            if (NewsViewModel.LastSelectedNews == null)
             {
                 //If it is null, binding doesn't work, as the progress bar has nothing to bind to and defaults to visible
                 NewsViewModel.LastSelectedNews = new NewsModel();
             }
 
-            if(ConnectionHelper.IsConnected && !NewsViewModel.Loading)
+            if (ConnectionHelper.IsConnected && !NewsViewModel.Loading)
             {
                 LoadNews();
             }
@@ -62,6 +63,12 @@ namespace OneBreak.Pages
 
             if (news == null) return;
 
+            if(NewsWebView != null && NewsWebView.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NewsWebView.Navigate(new Uri("about:blank"));
+                NewsWebView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+
             NewsViewModel.LastSelectedNews = news;
 
             if (VisualStateTriggers.CurrentState == MobileState)
@@ -70,15 +77,16 @@ namespace OneBreak.Pages
                 return;
             }
 
-            if ((NewsViewModel.LastSelectedNews.NewsContent != null && NewsViewModel.LastSelectedNews.NewsContent.Count > 0) || 
-                NewsViewModel.LastSelectedNews.Loading) return;
-
-            if(ConnectionHelper.IsConnected)
+            if (ConnectionHelper.IsConnected)
             {
-                await NewsViewModel.LastSelectedNews.LoadNewsBody();
+                if ((news.NewsContent == null || news.NewsContent.Count <= 0) && !news.Loading)
+                {
+                    await NewsViewModel.LastSelectedNews.LoadNewsBody();
+                }
             }
             else
             {
+                NewsViewModel.LastSelectedNews = news;
                 RegisterOnConnectedEvent();
                 _registeredForNewsBody = true;
             }
@@ -104,9 +112,9 @@ namespace OneBreak.Pages
         {
             if (!ConnectionHelper.IsConnected) return;
 
-            if(_registeredForNewsBody)
+            if (_registeredForNewsBody)
             {
-                if(NewsViewModel.LastSelectedNews.NewsContent == null || 
+                if (NewsViewModel.LastSelectedNews.NewsContent == null ||
                     NewsViewModel.LastSelectedNews.NewsContent.Count <= 0)
                 {
                     NewsViewModel.LastSelectedNews.LoadNewsBody();
@@ -130,6 +138,32 @@ namespace OneBreak.Pages
             _onConnectedRegistered = false;
         }
         #endregion
+
+        private void ViewOriginalButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(NewsViewModel.LastSelectedNews.OriginalUrl)) return;
+            NewsViewModel.LastSelectedNews.LoadingFailed = false;
+
+            WebView webView;
+            
+            if (NewsWebView == null || NewsWebView.Visibility == Windows.UI.Xaml.Visibility.Collapsed)
+            {
+                webView = (WebView)FindName("NewsWebView");
+            }
+            else
+            {
+                webView = NewsWebView;
+            }
+
+            if (webView == null)
+            {
+                NewsViewModel.LastSelectedNews.LoadingFailed = true;
+                return;
+            }
+
+            webView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            webView.Navigate(new Uri(NewsViewModel.LastSelectedNews.OriginalUrl));
+        }
 
         private void VisualStateTriggers_CurrentStateChanged(object sender, Windows.UI.Xaml.VisualStateChangedEventArgs e)
         {
