@@ -11,7 +11,7 @@ namespace OneBreak.Models
 {
     public class NewsModel : ViewModelBase
     {
-        private const string NewsBodyParagraphTag = "p", NewsBodyImageTag = "img", NewsBodyHrefTag = "href";
+        private const string NewsBodyParagraphTag = "p", NewsBodyImageTag = "img", NewsBodyHrefTag = "href", NewsBodySrcTag = "src";
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -161,6 +161,10 @@ namespace OneBreak.Models
                         if (node.Attributes.Contains(NewsBodyHrefTag))
                         {
                             newsContent.Add(new KeyValuePair<string, string>(NewsBodyImageTag, node.Attributes[NewsBodyHrefTag].Value));
+                        }
+                        else if (node.Attributes.Contains(NewsBodySrcTag))
+                        {
+                            newsContent.Add(new KeyValuePair<string, string>(NewsBodyImageTag, node.Attributes[NewsBodySrcTag].Value));
                         }
                     }
                 }
