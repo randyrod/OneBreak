@@ -1,0 +1,8 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OneBreak.Resources.Strings.en.en_US">
+
+    <x:String x:Key="NewsLoadingFailedText">Something went wrong with our loading Strat-1</x:String>
+    <x:String x:Key="NewsLoadingFailedButtonText">Use alternate strategy</x:String>
+</ResourceDictionary>
