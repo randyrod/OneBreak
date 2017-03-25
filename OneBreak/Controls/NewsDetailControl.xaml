@@ -25,6 +25,14 @@
             <Setter Property="MaxWidth" Value="720"/>
         </Style>
     </UserControl.Resources>
-    
-    <StackPanel x:Name="NewsContentStackPanel" VerticalAlignment="Stretch"/>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource TextBlockForegroundPrimary}" FontSize="32" Text="{Binding Title, Mode=OneWay}" 
+                   Margin="10,0,10,10" TextAlignment="Center" FontWeight="SemiBold"/>
+        <StackPanel Grid.Row="1" x:Name="NewsContentStackPanel" VerticalAlignment="Stretch"/>
+    </Grid>
 </UserControl>
