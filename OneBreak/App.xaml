@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="Resources/Icons.xaml"/>
                 <ResourceDictionary Source="Resources/StyleGuide.xaml"/>
                 <ResourceDictionary Source="Resources/CommonStyles.xaml"/>
+                <ResourceDictionary Source="Resources/Strings/en/en-US/en-US.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Name="BoolToVisibilityConverter"/>
             <converters:BoolToVisibilityConverter x:Name="BoolToVisibilityConverterInverse" Inverse="True"/>
