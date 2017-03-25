@@ -32,7 +32,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource TextBlockForegroundPrimary}" FontSize="32" Text="{Binding Title, Mode=OneWay}" 
-                   Margin="10,0,10,10" TextAlignment="Center" FontWeight="SemiBold"/>
+                   Margin="10,0,10,10" TextAlignment="Center" FontWeight="SemiBold" TextWrapping="WrapWholeWords"/>
         <StackPanel Grid.Row="1" x:Name="NewsContentStackPanel" VerticalAlignment="Stretch"/>
     </Grid>
 </UserControl>

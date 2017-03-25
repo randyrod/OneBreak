@@ -84,7 +84,7 @@
 
         <Grid Grid.Row="1" Grid.Column="1" Background="Black" Visibility="{x:Bind NewsViewModel.LastSelectedNews.LoadingFailed, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="{StaticResource NewsLoadingFailedText}" HorizontalAlignment="Center" FontWeight="SemiBold" 
+                <TextBlock Text="{StaticResource NewsLoadingFailedText}" HorizontalAlignment="Center" FontWeight="SemiBold" TextWrapping="WrapWholeWords"
                            Margin="10" Style="{ThemeResource TextBlockForegroundPrimary}"/>
                 <Button Content="{StaticResource NewsLoadingFailedButtonText}" HorizontalAlignment="Center" Margin="10" Click="ViewOriginalButton_Click"/>
             </StackPanel>
