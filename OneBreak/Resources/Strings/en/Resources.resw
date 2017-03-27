@@ -120,6 +120,12 @@
   <data name="DriversText" xml:space="preserve">
     <value>Drivers</value>
   </data>
+  <data name="LoadingFailed.Text" xml:space="preserve">
+    <value>Something went wrong with our loading Strat-1</value>
+  </data>
+  <data name="LoadingFailedButton.Content" xml:space="preserve">
+    <value>Use alternate strategy</value>
+  </data>
   <data name="NewsText" xml:space="preserve">
     <value>News</value>
   </data>
