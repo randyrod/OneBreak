@@ -81,12 +81,12 @@
                           x:Name="NewsDetailPresenter"
                           Content="{x:Bind NewsViewModel.LastSelectedNews, Mode=OneWay}"
                           ContentTemplate="{StaticResource NewsDetailPresenterTemplate}"/>
-
+        
         <Grid Grid.Row="1" Grid.Column="1" Background="Black" Visibility="{x:Bind NewsViewModel.LastSelectedNews.LoadingFailed, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="{StaticResource NewsLoadingFailedText}" HorizontalAlignment="Center" FontWeight="SemiBold" TextWrapping="WrapWholeWords"
+                <TextBlock x:Uid="LoadingFailed" HorizontalAlignment="Center" FontWeight="SemiBold" TextWrapping="WrapWholeWords"
                            Margin="10" Style="{ThemeResource TextBlockForegroundPrimary}"/>
-                <Button Content="{StaticResource NewsLoadingFailedButtonText}" HorizontalAlignment="Center" Margin="10" Click="ViewOriginalButton_Click"/>
+                <Button x:Uid="LoadingFailedButton" HorizontalAlignment="Center" Margin="10" Click="ViewOriginalButton_Click"/>
             </StackPanel>
         </Grid>
 

@@ -17,10 +17,10 @@
 
         <Grid Background="Black" Visibility="{x:Bind CurrentNews.LoadingFailed, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="{StaticResource NewsLoadingFailedText}" 
+                <TextBlock x:Uid="LoadingFailed" 
                            HorizontalAlignment="Center" FontWeight="SemiBold" TextWrapping="WrapWholeWords"
                            Margin="10" Style="{ThemeResource TextBlockForegroundPrimary}"/>
-                <Button Content="{StaticResource NewsLoadingFailedButtonText}" HorizontalAlignment="Center" 
+                <Button x:Uid="LoadingFailedButton" HorizontalAlignment="Center" 
                         Margin="10" Click="ViewOriginalButton_Click"/>
             </StackPanel>
         </Grid>
