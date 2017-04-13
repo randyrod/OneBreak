@@ -109,6 +109,7 @@ namespace OneBreak.ViewModels
                 return;
             }
 
+            News.Clear();
             foreach (var item in result)
             {
                 item.Provider = gpuProviderText;
