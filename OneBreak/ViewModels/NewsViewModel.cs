@@ -112,6 +112,8 @@ namespace OneBreak.ViewModels
             News.Clear();
             foreach (var item in result)
             {
+                //Lazyness taking over
+                if (item.Title.Contains("Video") || item.Title.Contains("video")) continue;
                 item.Provider = gpuProviderText;
                 News.Add(item);
             }
