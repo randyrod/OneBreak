@@ -31,9 +31,10 @@ namespace OneBreak.Pages
 
         private void InitializeNavigationItems()
         {
-            if (NewsLeftNavItem == null || NewsLeftNavItem.Visibility == Visibility.Collapsed) return;
+            if (BaseSplitView == null || BaseSplitView.Visibility == Visibility.Collapsed) return;
 
             NewsLeftNavItem.NavigationPage = typeof(NewsPage);
+            DriversLeftNavItem.NavigationPage = typeof(DriversPage);
         }
 
         private void HamburgerButton_OnClick(object sender, RoutedEventArgs e)
@@ -52,11 +53,6 @@ namespace OneBreak.Pages
             if (clickedItem?.NavigationPage == null) return;
 
             NavigateToPage(clickedItem.NavigationPage);
-        }
-
-        private void CommandBarNewsButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            NavigateToPage(typeof(NewsPage));
         }
 
         private void NavigateToPage(Type page)
@@ -90,5 +86,17 @@ namespace OneBreak.Pages
                 e.Handled = true;
             }
         }
+
+#region CommandBarActions
+        private void CommandBarNewsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            NavigateToPage(typeof(NewsPage));
+        }
+
+        private void CommandBarDriversButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            NavigateToPage(typeof(DriversPage));
+        }
+#endregion
     }
 }

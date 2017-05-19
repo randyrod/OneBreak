@@ -117,7 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DriversText" xml:space="preserve">
+  <data name="CommandBarDrivers.Label" xml:space="preserve">
+    <value>Drivers</value>
+  </data>
+  <data name="CommandBarNews.Label" xml:space="preserve">
+    <value>News</value>
+  </data>
+  <data name="Drivers.Text" xml:space="preserve">
     <value>Drivers</value>
   </data>
   <data name="LoadingFailed.Text" xml:space="preserve">
@@ -126,10 +132,16 @@
   <data name="LoadingFailedButton.Content" xml:space="preserve">
     <value>Use alternate strategy</value>
   </data>
-  <data name="NewsText" xml:space="preserve">
+  <data name="News.Text" xml:space="preserve">
     <value>News</value>
   </data>
   <data name="ProviderGpu" xml:space="preserve">
     <value>GpUpdate.com</value>
+  </data>
+  <data name="RecentNews.Header" xml:space="preserve">
+    <value>Recent News</value>
+  </data>
+  <data name="StarredNews.Header" xml:space="preserve">
+    <value>Starred News</value>
   </data>
 </root>

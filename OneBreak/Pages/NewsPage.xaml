@@ -58,19 +58,19 @@
             <ColumnDefinition x:Name="DetailColumn" Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="News" Margin="10" Grid.Row="0"/>
+        <TextBlock x:Uid="News" Margin="10" Grid.Row="0"/>
 
         <ProgressBar IsIndeterminate="True" Foreground="Teal" Grid.Row="1" VerticalAlignment="Top"
                      IsEnabled="{x:Bind NewsViewModel.Loading, Mode=OneWay}"
                      Visibility="{x:Bind NewsViewModel.Loading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
 
         <Pivot Grid.Column="0" Grid.Row="1">
-            <PivotItem Header="Current News">
+            <PivotItem x:Uid="RecentNews">
                 <ListView x:Name="NewsTitles" IsItemClickEnabled="True" ItemClick="NewsItem_OnClick" SelectionMode="Single" 
                   ItemsSource="{x:Bind NewsViewModel.News, Mode=OneWay}" ItemContainerStyle="{ThemeResource NewsListViewStyle}"
                           ItemTemplate="{StaticResource NewsListViewTemplate}"/>
             </PivotItem>
-            <PivotItem Header="Starred News">
+            <PivotItem x:Uid="StarredNews">
                 <ListView x:Name="StarredNewsTitles" IsItemClickEnabled="True" ItemClick="NewsItem_OnClick" SelectionMode="Single" 
                   ItemsSource="{x:Bind NewsViewModel.StarredNews, Mode=OneWay}" ItemContainerStyle="{ThemeResource NewsListViewStyle}"
                           ItemTemplate="{StaticResource NewsListViewTemplate}"/>

@@ -8,7 +8,7 @@
     xmlns:controls="using:OneBreak.Controls"
     xmlns:triggers="using:OneBreak.StateTriggers"
     xmlns:pages="using:OneBreak.Pages"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Background="{ThemeResource PrimaryBackgroundColor}">
 
     <Grid>
         <VisualStateManager.VisualStateGroups>
@@ -20,8 +20,6 @@
                     <VisualState.Setters>
                         <Setter Target="BaseSplitView.Visibility" Value="Visible"/>
                         <Setter Target="RootFrame.Margin" Value="48,0,0,0"/>
-                        <Setter Target="HamburgerButtonPanel.Visibility" Value="Visible"/>
-                        <Setter Target="AppsCommandBar.Visibility" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -42,7 +40,7 @@
                    DisplayMode="CompactOverlay" Visibility="Collapsed" x:DeferLoadStrategy="Lazy">
             <SplitView.Pane>
                 <StackPanel>
-                    <StackPanel x:Name="HamburgerButtonPanel" Visibility="Collapsed" x:DeferLoadStrategy="Lazy">
+                    <StackPanel x:Name="HamburgerButtonPanel">
                         <ToggleButton x:Name="HamburgerButton" Click="HamburgerButton_OnClick">
                             <ToggleButton.Content>
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -57,11 +55,11 @@
                     <ListView IsItemClickEnabled="True" SelectionMode="Single" ItemClick="LeftNavItem_OnClick">
                         <ListViewItem>
                             <controls:LeftNavItemControl x:Name="NewsLeftNavItem" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                                 ItemText="News" IconData="{StaticResource NewsIcon}"/>
+                                                  x:Uid="News" IconData="{StaticResource NewsIcon}"/>
                         </ListViewItem>
                         <ListViewItem>
                             <controls:LeftNavItemControl x:Name="DriversLeftNavItem" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                                 ItemText="Drivers" IconData="{StaticResource DriverIcon}"/>
+                                                 x:Uid="Drivers" IconData="{StaticResource DriverIcon}"/>
                         </ListViewItem>
                     </ListView>
                 </StackPanel>
@@ -71,14 +69,14 @@
 
     <pages:BasePage.BottomAppBar>
         <CommandBar x:Name="AppsCommandBar" Visibility="Collapsed" x:DeferLoadStrategy="Lazy">
-            <AppBarButton Label="News" Click="CommandBarNewsButton_OnClick">
+            <AppBarButton x:Uid="CommandBarNews" Click="CommandBarNewsButton_OnClick">
                 <AppBarButton.Content>
                     <Path Data="{StaticResource NewsIcon}" Stretch="Uniform" Stroke="White" 
                           StrokeThickness="1" StrokeLineJoin="Round"/>
                 </AppBarButton.Content>
             </AppBarButton>
-            
-            <AppBarButton Label="Drivers">
+
+            <AppBarButton x:Uid="CommandBarDrivers" Click="CommandBarDriversButton_OnClick">
                 <AppBarButton.Content>
                     <Path Data="{StaticResource DriverIcon}" Stretch="Uniform" Stroke="White" 
                           StrokeThickness="1" StrokeLineJoin="Round"/>

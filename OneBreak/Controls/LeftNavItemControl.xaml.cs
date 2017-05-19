@@ -14,9 +14,9 @@ namespace OneBreak.Controls
             set { SetValue(IconDataProperty, value); }
         }
 
-        public DependencyProperty ItemTextProperty = DependencyProperty.Register(nameof(ItemText), 
+        public DependencyProperty ItemTextProperty = DependencyProperty.Register(nameof(Text), 
             typeof(string), typeof(LeftNavItemControl), new PropertyMetadata(null));
-        public string ItemText
+        public string Text
         {
             get { return (string)GetValue(ItemTextProperty); }
             set { SetValue(ItemTextProperty, value); }

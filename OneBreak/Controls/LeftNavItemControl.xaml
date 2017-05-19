@@ -11,6 +11,6 @@
 
     <StackPanel Orientation="Horizontal">
         <Path Data="{x:Bind IconData, Mode=OneWay}" Stretch="Uniform" Width="24" Stroke="White" StrokeThickness="1"/>
-        <TextBlock Text="{x:Bind ItemText, Mode=OneWay}" VerticalAlignment="Center" Margin="20, 0"/>
+        <TextBlock Text="{x:Bind Text, Mode=OneWay}" VerticalAlignment="Center" Margin="20, 0"/>
     </StackPanel>
 </UserControl>
